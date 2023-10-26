@@ -1,0 +1,174 @@
+select * from crime_scene_report
+where city like "%SQL%"
+and date = 20180115
+and type like "murder";
+
+Security footage shows that there were 2 witnesses. 
+The first witness lives at the last house on "Northwestern Dr". 
+The second witness, named Annabel, lives somewhere on "Franklin Ave".
+
+---------------------------------------------------------------------------------------------------------
+
+select * from person
+where address_street_name like "%Northwestern Dr%"
+order by address_number desc;
+
+id	name		license_id	address_number	address_street_name	ssn
+14887	Morty Schapiro	118009		4919		Northwestern Dr		111564949
+
+
+select * from person
+where address_street_name like "%Franklin Ave%"
+and name like "%Annabel%";
+
+id	name		license_id	address_number	address_street_name	ssn
+16371	Annabel Miller	490173		103		Franklin Ave		318771143
+
+---------------------------------------------------------------------------------------------------------
+TRANSCRIPT
+
+- MORTY
+select transcript from interview
+where person_id = 14887;
+
+I heard a gunshot and then saw a man run out. 
+He had a "Get Fit Now Gym" bag. 
+The membership number on the bag started with "48Z". 
+Only gold members have those bags. 
+The man got into a car with a plate that included "H42W".
+
+-ANNABEL
+select transcript from interview
+where person_id = 14887;
+
+I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th.
+
+---------------------------------------------------------------------------------------------------------
+09 Jan Gym
+
+select * from get_fit_now_check_in
+where membership_id like "48Z%"
+and check_in_date = 20180109;
+
+membership_id	check_in_date	check_in_time	check_out_time
+48Z7A		20180109	1600		1730
+48Z55		20180109	1530		1700
+
+--------------------------------------------------------------------------------
+Cars
+
+select * from drivers_license
+where plate_number like "%H42W%"
+and gender = male
+
+id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model
+423327	30	70	brown		brown		male	0H42W2		Chevrolet	Spark LS
+664760	21	71	black		black		male	4H42WR		Nissan		Altima
+
+--------------
+id 423327
+
+select id from person
+where license_id = 423327;
+
+67318
+
+
+id 664760
+
+select id from person
+where license_id = 664760;
+
+51739
+--------------------------------------
+select * from get_fit_now_member
+where person_id = 67318
+and membership_status like "gold"
+
+
+
+id	person_id	name		membership_start_date	membership_status
+48Z55	67318		Jeremy Bowers	20160101		gold
+
+--------------------------------------------------------------------------------
+INSERT INTO solution VALUES (1, 'Jeremy Bowers');
+        
+        SELECT value FROM solution;
+
+
+Congrats, you found the murderer! 
+But wait, there's more... If you think you're up for a challenge, try querying the interview transcript of the murderer to find the real villain behind this crime. 
+If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries. 
+Use this same INSERT statement with your new suspect to check your answer.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+select * from interview
+where person_id = 67318
+
+I was hired by a woman with a lot of money. 
+I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). 
+She has red hair and she drives a Tesla Model S. 
+I know that she attended the SQL Symphony Concert 3 times in December 2017.
+
+------------------------------------------------------------------------------
+
+select * from drivers_license
+where car_model like "%Model S%"
+and hair_color = "red"
+and gender = "female"
+
+id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model
+202298	68	66	green		red		female	500123		Tesla		Model S
+291182	65	66	blue		red		female	08CM64		Tesla		Model S
+918773	48	65	black		red		female	917UU3		Tesla		Model 
+
+----------------------------------------------------------------------------------------------------------
+id 202298
+
+select id from person
+where license_id = 202298
+
+99716
+
+
+
+id 291182
+
+select id from person
+where license_id = 291182
+
+90700
+
+
+
+id 918773
+
+select id from person
+where license_id = 918773
+
+78881
+-------------------------
+select * from facebook_event_checkin
+where person_id = 99716
+and date like "201712%"
+
+person_id	event_id	event_name		date
+99716		1143		SQL Symphony Concert	20171206
+99716		1143		SQL Symphony Concert	20171212
+99716		1143		SQL Symphony Concert	20171229
+----------------------------------------------------------------
+select * from person
+where id = 99716
+
+
+
+id	name			license_id	address_number	address_street_name	ssn
+99716	Miranda Priestly	202298		1883		Golden Ave		987756388
+---------------------------------------------------------------------------------------------------
+INSERT INTO solution VALUES (1, 'Miranda Priestly');
+        
+        SELECT value FROM solution;
+
+Congrats, you found the brains behind the murder! 
+Everyone in SQL City hails you as the greatest SQL detective of all time. 
+Time to break out the champagne!
